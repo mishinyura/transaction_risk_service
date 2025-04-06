@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "transaction-risk-service"
+version = "0.1.0"
+description = ""
+authors = ["yuramishin <robothot@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.12"
+dynaconf = "^3.2.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
