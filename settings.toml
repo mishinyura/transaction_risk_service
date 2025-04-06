@@ -1,0 +1,15 @@
+[app_settings]
+app_port = 8000
+app_version = "1.0.0"
+app_name = "service"
+app_host = "localhost"
+app_mount = "/api/v1"
+app_key = 'my_key'
+
+
+[db_settings]
+db_name = "transaction_risk_db"
+db_user = "postgres"
+db_password = "pass"
+db_host = "localhost"
+db_port = 5432
