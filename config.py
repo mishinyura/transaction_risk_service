@@ -25,7 +25,7 @@ class Settings(BaseModel):
 
 
 dyna_settings = Dynaconf(
-    settinfs_files=['settings.toml']
+    settings_files=['settings.toml']
 )
 
 
