@@ -1,16 +1,19 @@
 from fastapi import FastAPI
 
-ROUTES = {
+from app.api.tests_router import test_router
 
+ROUTES = {
+    '': test_router
 }
 
 
-def setting_routes(app: FastAPI) -> None:
+def set_routes(app: FastAPI) -> None:
     for prefix, router in ROUTES.items():
-        app.include_router(prefix=prefix, router=router)
+        print(router)
+        app.include_router(router=router, prefix=prefix)
 
 
 def get_app(name: str) -> FastAPI:
     app = FastAPI(title=name)
-    setting_routes(app)
+    set_routes(app)
     return app
