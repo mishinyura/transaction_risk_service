@@ -10,6 +10,6 @@ app_key = 'my_key'
 [db_settings]
 db_name = "transaction_risk_db"
 db_user = "postgres"
-db_password = "pass"
+db_password = "boss"
 db_host = "localhost"
 db_port = 5432
