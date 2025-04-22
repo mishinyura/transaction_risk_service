@@ -18,6 +18,17 @@ class DBConfig(BaseModel):
     db_host: str
     db_port: int
 
+    @property
+    def get_url(self):
+        path = 'postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}'.format(
+            self.db_user,
+            self.db_password,
+            self.db_host,
+            self.db_port,
+            self.db_name
+        )
+        return path
+
 
 class Settings(BaseModel):
     app: AppConfig
