@@ -3,11 +3,9 @@ from datetime import datetime
 from sqlalchemy import (
     Column,
     String,
-    Integer,
     Numeric,
     DateTime,
     ForeignKey,
-    CheckConstraint,
     Enum as Enalchemy
 )
 from sqlalchemy.orm import validates
@@ -20,8 +18,8 @@ from app.models.accounts import Account
 class Transaction(BaseModel):
     __tablename__ = 'transactions'
 
-    sender_account_id = Column(Integer, ForeignKey('accounts.id'), nullable=False)
-    receiver_account_id = Column(Integer, ForeignKey('accounts.id'), nullable=False)
+    sender_account_id = Column(String, ForeignKey('accounts.id'), nullable=False)
+    receiver_account_id = Column(String, ForeignKey('accounts.id'), nullable=False)
     transaction_amount = Column(Numeric(10, 2), nullable=False)
     transaction_type = Column(Enalchemy(TransactionType), nullable=False)
     timestamp = Column(DateTime, nullable=False)
