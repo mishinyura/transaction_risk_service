@@ -11,15 +11,14 @@ from sqlalchemy import (
 from sqlalchemy.orm import validates
 
 from app.core.enums import TransactionStatus, TransactionType, DeviceUser
-from app.models.base_model import BaseModel
-from app.models.accounts import Account
+from app.models.base_model import BaseModel, BaseInit
 
 
-class Transaction(BaseModel):
+class Transaction(BaseModel, BaseInit):
     __tablename__ = 'transactions'
 
-    sender_account_id = Column(String, ForeignKey('accounts.id'), nullable=False)
-    receiver_account_id = Column(String, ForeignKey('accounts.id'), nullable=False)
+    sender_account_id = Column(String, ForeignKey('accounts.account_id'), nullable=False)
+    receiver_account_id = Column(String, ForeignKey('accounts.account_id'), nullable=False)
     transaction_amount = Column(Numeric(10, 2), nullable=False)
     transaction_type = Column(Enalchemy(TransactionType), nullable=False)
     timestamp = Column(DateTime, nullable=False)

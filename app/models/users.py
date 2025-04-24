@@ -1,10 +1,10 @@
-from sqlalchemy import Column, String, SecretStr
+from sqlalchemy import Column, String
 
-from app.models.base_model import BaseModel
+from app.models.base_model import BaseModel, BaseInit
 
 
-class User(BaseModel):
-    __tableName__ = 'users'
+class User(BaseModel, BaseInit):
+    __tablename__ = 'users'
 
     username = Column(String, nullable=False, unique=True)
-    password = Column(SecretStr, nullable=False)
+    password = Column(String, nullable=False)

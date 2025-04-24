@@ -1,4 +1,12 @@
 from sqlalchemy import Column, Integer
+from sqlalchemy.orm import DeclarativeBase, declarative_base
+
+
+# class BaseInit(DeclarativeBase):
+#     pass
+
+
+BaseInit = declarative_base()
 
 
 class BaseModel:

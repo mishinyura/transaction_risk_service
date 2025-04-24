@@ -1,22 +1,19 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+from app.models.base_model import BaseInit
+from app.models import transactions, users, accounts
 
 from config import settings
 
 engine = create_async_engine(
-    settings.db.get_url,
+    url=settings.db.get_url,
     echo=True
 )
 
 session_maker = async_sessionmaker(
     bind=engine,
-    class_=AssertionError,
-    expire_on_commit=True
+    class_=AsyncSession,
+    expire_on_commit=False
 )
-
-
-class Base(DeclarativeBase):
-    pass
 
 
 async def get_session():
@@ -26,4 +23,5 @@ async def get_session():
 
 async def create_tables():
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(BaseInit.metadata.drop_all)
+        await conn.run_sync(BaseInit.metadata.create_all)
