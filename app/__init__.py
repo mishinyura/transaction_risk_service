@@ -1,57 +1,43 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from contextlib import asynccontextmanager
-from app.models.db_helper import db_helper
 
 from config import settings
-from app.routes import auth_router, protected_router
-# from app.exceptions.http import internal_server_error, InternalServerException # Если будут кастомные обработчики
+from app.routes import auth, protected
 
-
-_app = FastAPI(
+app = FastAPI(
     debug=settings.app.debug,
     title=settings.app_info.name,
     description=settings.app_info.description,
-    version=settings.app.app_version, # Используем версию из AppConfig
     docs_url=settings.app_info.docs_url,
-    openapi_url=f'{settings.app_info.docs_url.rstrip("/")}/openapi.json',
+    openapi_url=f"{settings.app_info.docs_url}/openapi.json",
+    version="0.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("INFO: Application startup: Initializing resources...")
-    yield
-    print("INFO: Application shutdown: Disposing resources...")
-    await db_helper.dispose()
+def create_app() -> FastAPI:
+    app.include_router(auth.router)
+    app.include_router(protected.router)
 
-_app.router.lifespan_context = lifespan
+    from app.models.db_helper import db_manager
 
-# --- Middlewares ---
-# CORS Middleware (важно для взаимодействия с фронтендом на другом порту/домене)
-if settings.cors.allow_origins:
-    _app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.cors.allow_origins,
-        allow_credentials=settings.cors.allow_credentials,
-        allow_methods=settings.cors.allow_methods,
-        allow_headers=settings.cors.allow_headers,
-    )
-    print(f"INFO: CORS middleware enabled for origins: {settings.cors.allow_origins}")
+    @app.on_event("startup")
+    async def startup_event():
+        print("Запуск приложения...")
+        await db_manager.create_database_tables()
+        print("Таблицы базы данных проверены/созданы.")
 
-# GZip Middleware
-_app.add_middleware(GZipMiddleware, minimum_size=1000) # Сжимать ответы > 1KB
+    @app.on_event("shutdown")
+    async def shutdown_event():
+        print("Остановка приложения...")
+        await db_manager.dispose()
+        print("Соединения с базой данных закрыты.")
 
-# --- Подключение роутеров ---
-API_PREFIX = "/api/v1"
-
-_app.include_router(auth_router, prefix=API_PREFIX)
-_app.include_router(protected_router, prefix=API_PREFIX)
-
-
-# --- Статические файлы ---
-# _app.mount("/static", StaticFiles(directory= Path(__file__).parent / "static"), name="static")
-
-app = _app
+    return app

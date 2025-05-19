@@ -1,30 +1,24 @@
 import uuid
-from typing import Optional
-from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
+from pydantic import BaseModel, Field, EmailStr
 
 
 class UserBase(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50, description="Уникальное имя пользователя")
-    email: Optional[EmailStr] = Field(None, description="Адрес электронной почты")
-    full_name: Optional[str] = Field(None, max_length=100, description="Полное имя пользователя")
+    username: str = Field(..., min_length=3, max_length=64)
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8, description="Пароль пользователя (минимум 8 символов)")
+    password: str = Field(..., min_length=8)
+    email: EmailStr | None = None
+    full_name: str | None = None
 
 
-class UserUpdate(BaseModel):
-    email: Optional[EmailStr] = Field(None, description="Новый адрес электронной почты")
-    full_name: Optional[str] = Field(None, max_length=100, description="Новое полное имя")
-    is_active: Optional[bool] = Field(None, description="Статус активности пользователя")
-
-
-class UserPublic(UserBase):
+class UserRead(UserBase):
     id: uuid.UUID
-    is_active: bool
-    is_superuser: bool
+    email: EmailStr | None = None
+    full_name: str | None = None
     created_at: datetime
-    updated_at: Optional[datetime] = None
+    updated_at: datetime
 
-    model_config = {"from_attributes": True}
+    class Config:
+        from_attributes = True

@@ -3,9 +3,7 @@ __pycache__/
 *$py.class
 
 
-.app_secret_key_dev
-.app_secret_key_prod
-.secret_key_generated_do_not_commit # Если используется альтернативное имя
+secret_key.txt
 
 # IDE / Editor specific
 .vscode/

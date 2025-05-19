@@ -1,34 +1,21 @@
-[app_info]
-NAME = "Transaction Analysis Service"
-DESCRIPTION = "Service for analyzing client transactions and calculating risk levels."
-DOCS_URL = "/api/v1/docs"
+[default]
+# This setting can be 'development', 'production'
+current_env = "development"
 
-[environment]
-ACTIVE = "development"
+[development.app_info]
+name = "Auth App"
+description = "FastAPI Authentication and Authorization with Cookies"
+docs_url = "/docs"
 
-[development]
-DEBUG = true
-LOG_LEVEL = "DEBUG"
-DB_ECHO = true # Для SQLAlchemy
-DB_ECHO_POOL = false
-DB_POOL_SIZE = 5
-DB_MAX_OVERFLOW = 10
-SECRET_KEY_FILENAME = ".app_secret_key_dev"
-COOKIE_SECURE_FLAG = false # Для HTTP
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
-ACCESS_TOKEN_COOKIE_NAME = "tx_dev_auth_token"
+[development.app]
+debug = true
+secret_key_file_name = "secret_key.txt"
+cookie_name = "auth_session"
+cookie_max_age_days = 7
 
-[development.db_settings]
-TYPE = "postgresql+asyncpg"
-HOST = "db_transaction_analysis_service"
-PORT = 5432
-USER = "dev_user"
-PASSWORD = "dev_password"
-NAME = "transaction_analysis_dev_db"
-
-
-[development.cors_settings]
-ALLOW_ORIGINS_STR = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8080,http://localhost:5173"
-ALLOW_CREDENTIALS = true
-ALLOW_METHODS = "*"
-ALLOW_HEADERS = "*"
+[development.database]
+host = "db"
+port = 5432
+username = "appuser"
+password = "apppassword"
+db_name = "authdb"

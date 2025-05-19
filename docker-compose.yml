@@ -1,41 +1,25 @@
 version: '3.8'
 
 services:
-  db_transaction_analysis_service:
-    image: postgres:16-alpine
-    container_name: tx_analysis_pg_db
+  web:
+    build: .
+    ports:
+      - "8000:8000"
     volumes:
-      - postgres_tx_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_USER: ${DYNACONF_DEVELOPMENT__DB_SETTINGS__USER:-dev_user}
-      POSTGRES_PASSWORD: ${DYNACONF_DEVELOPMENT__DB_SETTINGS__PASSWORD:-dev_password}
-      POSTGRES_DB: ${DYNACONF_DEVELOPMENT__DB_SETTINGS__NAME:-transaction_analysis_dev_db}
-    ports:
-      - "${DYNACONF_DEVELOPMENT__DB_SETTINGS__PORT:-5432}:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-dev_user} -d $${POSTGRES_DB:-transaction_analysis_dev_db} -q"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
-  # Сервис FastAPI приложения
-  app_transaction_analysis_service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: tx_analysis_fastapi_app
-    environment:
-      ENVIRONMENT__ACTIVE: "development"
-      PYTHONUNBUFFERED: 1
-      PYTHONDONTWRITEBYTECODE: 1
-    ports:
-      - "${DYNACONF_DEVELOPMENT__PORT:-8000}:8000" # Убедитесь, что порт соответствует настройкам
+      - .:/app
     depends_on:
-      db_transaction_analysis_service:
-        condition: service_healthy
-    restart: unless-stopped
-    stop_signal: SIGINT
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: ${DB_USER:-appuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-apppassword}
+      POSTGRES_DB: ${DB_NAME:-authdb}
+    ports:
+      - "5432:5432"
 
 volumes:
-  postgres_tx_data:
+  postgres_data:
