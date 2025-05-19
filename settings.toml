@@ -1,15 +1,34 @@
-[app_settings]
-app_port = 8000
-app_version = "1.0.0"
-app_name = "service"
-app_host = "localhost"
-app_mount = "/api/v1"
-app_key = 'my_key'
+[app_info]
+NAME = "Transaction Analysis Service"
+DESCRIPTION = "Service for analyzing client transactions and calculating risk levels."
+DOCS_URL = "/api/v1/docs"
+
+[environment]
+ACTIVE = "development"
+
+[development]
+DEBUG = true
+LOG_LEVEL = "DEBUG"
+DB_ECHO = true # Для SQLAlchemy
+DB_ECHO_POOL = false
+DB_POOL_SIZE = 5
+DB_MAX_OVERFLOW = 10
+SECRET_KEY_FILENAME = ".app_secret_key_dev"
+COOKIE_SECURE_FLAG = false # Для HTTP
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_COOKIE_NAME = "tx_dev_auth_token"
+
+[development.db_settings]
+TYPE = "postgresql+asyncpg"
+HOST = "db_transaction_analysis_service"
+PORT = 5432
+USER = "dev_user"
+PASSWORD = "dev_password"
+NAME = "transaction_analysis_dev_db"
 
 
-[db_settings]
-db_name = "transactions_risk_db"
-db_user = "postgres"
-db_password = "boss"
-db_host = "localhost"
-db_port = 5432
+[development.cors_settings]
+ALLOW_ORIGINS_STR = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8080,http://localhost:5173"
+ALLOW_CREDENTIALS = true
+ALLOW_METHODS = "*"
+ALLOW_HEADERS = "*"
