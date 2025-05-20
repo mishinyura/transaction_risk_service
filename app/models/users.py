@@ -7,7 +7,7 @@ from datetime import datetime
 from app.models.base_model import BaseModel, BaseInit
 
 
-class User(BaseInit):
+class UserModel(BaseInit):
     __tablename__ = "users"
 
     id: Mapped[py_uuid.UUID] = mapped_column(

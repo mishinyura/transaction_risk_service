@@ -9,7 +9,7 @@ from app.databases.base_crud import BaseCRUD
 
 
 class TransactionCRUD(BaseCRUD):
-    async def get_transaction(self, transaction_id: int, session: AsyncSession):
+    async def get_transaction(self, transaction_id: int, session: AsyncSession) -> TransactionSchema:
         result = await session.execute(select(TransactionModel).where(transaction_id == TransactionModel.id))
         transaction = result.scalar_one_or_none()
         return TransactionSchema.model_validate(transaction)

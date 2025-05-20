@@ -1,10 +1,14 @@
 [app_settings]
+debug = true
 app_port = 8000
 app_version = "1.0.0"
 app_name = "service"
 app_host = "localhost"
 app_mount = "/api/v1"
 app_key = 'my_key'
+secret_key = "key"
+cookie_name = "auth_session"
+cookie_max_age_days = 7
 
 
 [db_settings]

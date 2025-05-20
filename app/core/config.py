@@ -3,12 +3,16 @@ from pydantic import BaseModel
 
 
 class AppConfig(BaseModel):
+    debug: bool
     app_port: int
     app_version: str
     app_name: str
     app_host: str
     app_mount: str
     app_key: str
+    secret_key: str
+    cookie_name: str
+    cookie_max_age_days: int
 
 
 class DBConfig(BaseModel):
