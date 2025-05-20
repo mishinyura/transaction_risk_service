@@ -21,9 +21,9 @@ async def get_transactions(session: AsyncSession = Depends(get_session)):
 
 @transactions_router.get("/{transaction_id}", response_model=TransactionSchema | None)
 async def get_transaction_by_id(
-    transaction_id: str, session: AsyncSession = Depends(get_session)
+    transaction_id: int, session: AsyncSession = Depends(get_session)
 ):
-    payment = await transaction_service.get_payment_by_payment_id(
+    payment = await transaction_service.get_transaction_by_transaction_id(
         transaction_id=transaction_id, session=session
     )
     if not payment:
@@ -31,7 +31,7 @@ async def get_transaction_by_id(
     return payment
 
 
-# @payments_router.post("/base")
+# @transactions_router.post("/base")
 # async def create_transaction(
 #     transaction_data: TransactionSchema, session: AsyncSession = Depends(get_session)
 # ):

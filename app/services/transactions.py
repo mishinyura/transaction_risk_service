@@ -8,18 +8,18 @@ from app.schemas.transactions import TransactionSchema
 from app.core.enums import TransactionStatus, TransactionType
 
 
-class PaymentService:
+class TransactionService:
     def __init__(self):
-        self.repo = transaction_crud
+        self.crud = transaction_crud
 
     async def get_all_payments(self, session: AsyncSession) -> list[TransactionSchema]:
-        payments = await self.repo.get_all(session=session)
+        payments = await self.crud.get_all(session=session)
         return payments
 
-    async def get_payment_by_payment_id(
+    async def get_transaction_by_transaction_id(
         self, transaction_id: str, session: AsyncSession
     ) -> TransactionSchema | None:
-        transaction = await self.repo.transaction_id(
+        transaction = await self.crud.get_transaction(
             transaction_id=transaction_id, session=session
         )
         return transaction
@@ -57,4 +57,4 @@ class PaymentService:
     #         raise DuplicateException(message=str(exc))
 
 
-transaction_service = PaymentService()
+transaction_service = TransactionService()

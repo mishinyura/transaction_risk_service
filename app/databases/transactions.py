@@ -9,6 +9,11 @@ from app.databases.base_crud import BaseCRUD
 
 
 class TransactionCRUD(BaseCRUD):
+    async def get_transaction(self, transaction_id: int, session: AsyncSession):
+        result = await session.execute(select(TransactionModel).where(transaction_id == TransactionModel.id))
+        transaction = result.scalar_one_or_none()
+        return TransactionSchema.model_validate(transaction)
+
     async def get_all(self, session: AsyncSession) -> list[TransactionSchema] | list:
         result = await session.execute(select(TransactionModel))
         transactions = result.scalars().all()

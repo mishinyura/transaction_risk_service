@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 
 from app.api.tests_router import test_router
+from app.api.transactions import transactions_router
 from app.core.db import create_tables
 from config import settings
 
 ROUTES = {
-    '': test_router
+    '': test_router,
+    '/transactions': transactions_router
 }
 
 

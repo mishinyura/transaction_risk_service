@@ -5,6 +5,7 @@ from sqlalchemy import (
     String,
     Numeric,
     DateTime,
+    Boolean,
     ForeignKey,
     Enum as Enalchemy
 )
@@ -23,6 +24,7 @@ class TransactionModel(BaseModel, BaseInit):
     transaction_type = Column(Enalchemy(TransactionType), nullable=False)
     timestamp = Column(DateTime, nullable=False)
     transaction_status = Column(Enalchemy(TransactionStatus), nullable=False)
+    fraud_flag = Column(Boolean, nullable=False, default=False)
     geolocation = Column(String, nullable=False)
     device_user = Column(Enalchemy(DeviceUser), nullable=False)
 
