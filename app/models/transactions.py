@@ -32,8 +32,10 @@ class TransactionModel(BaseModel, BaseInit):
     def validate_transaction_amount(self, key, amount):
         if amount <= 0:
             raise ValueError('Сумма не может быть меньше или равной 0')
+        return amount
 
     @validates('timestamp')
     def validate_timestamp(self, key, date):
         if date > datetime.now():
             raise ValueError('Неверная дата')
+        return date

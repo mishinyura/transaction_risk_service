@@ -1,10 +1,12 @@
+import json
+
 from fastapi import APIRouter, Depends
 from starlette.responses import Response
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_201_CREATED, HTTP_409_CONFLICT
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# from app.exceptions import DuplicateException
-from app.schemas.transactions import TransactionSchema
+from app.core.exceptions import DuplicateException
+from app.schemas.transactions import TransactionSchema, TransactionCreateSchema
 from app.services.transactions import transaction_service
 from app.core.db import get_session
 
@@ -31,14 +33,16 @@ async def get_transaction_by_id(
     return payment
 
 
-# @transactions_router.post("/base")
-# async def create_transaction(
-#     transaction_data: TransactionSchema, session: AsyncSession = Depends(get_session)
-# ):
-#     try:
-#         await transaction_service.create_transaction(
-#             session=session, transaction_data=transaction_data
-#         )
-#     except DuplicateException:
-#         return Response(status_code=HTTP_409_CONFLICT)
-#     return Response(status_code=HTTP_201_CREATED)
+@transactions_router.post("/")
+async def create_transaction(
+    transaction_data: TransactionCreateSchema, session: AsyncSession = Depends(get_session)
+):
+    try:
+        for key in transaction_data:
+            print(key, '|')
+        await transaction_service.create_transaction(
+            session=session, transaction_data=transaction_data
+        )
+    except DuplicateException:
+        return Response(status_code=HTTP_409_CONFLICT)
+    return Response(status_code=HTTP_201_CREATED)
