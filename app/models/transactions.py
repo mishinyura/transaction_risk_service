@@ -14,7 +14,7 @@ from app.core.enums import TransactionStatus, TransactionType, DeviceUser
 from app.models.base_model import BaseModel, BaseInit
 
 
-class Transaction(BaseModel, BaseInit):
+class TransactionModel(BaseModel, BaseInit):
     __tablename__ = 'transactions'
 
     sender_account_id = Column(String, ForeignKey('accounts.account_id'), nullable=False)
