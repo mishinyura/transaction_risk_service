@@ -1,11 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# from app.clients.base_payment_client import base_payment_client
 from app.core.exceptions import DuplicateException, SqlException
 from app.models.transactions import TransactionModel
 from app.databases.transactions import transaction_crud
 from app.schemas.transactions import TransactionCreateSchema, TransactionSchema
-from app.core.enums import TransactionStatus, TransactionType
 
 
 class TransactionService:
@@ -33,7 +31,7 @@ class TransactionService:
             transaction_amount=transaction_data.transaction_amount,
             transaction_type=transaction_data.transaction_type,
             timestamp=transaction_data.timestamp,
-            transaction_status=TransactionStatus.SUCCESS,
+            transaction_status=transaction_data.transaction_status,
             fraud_flag=transaction_data.fraud_flag,
             geolocation=transaction_data.geolocation,
             device_user=transaction_data.device_user
