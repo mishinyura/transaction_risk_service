@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 
-from app.api import accounts_router, transactions_router
+from app.api import accounts_router, transactions_router, auth_router
 from app.core.db import create_tables
 from app.core.config import settings
 
 ROUTES = {
     '/transactions': transactions_router,
-    '/accounts': accounts_router
+    '/accounts': accounts_router,
+    '/auth': auth_router
 }
 
 
