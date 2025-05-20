@@ -27,7 +27,6 @@ class TransactionService:
     async def create_transaction(
             self, transaction_data: TransactionCreateSchema, session: AsyncSession
     ) -> None:
-        print("TIMESTAMP", transaction_data.timestamp)
         transaction = TransactionModel(
             sender_account_id=transaction_data.sender_account_id,
             receiver_account_id=transaction_data.receiver_account_id,

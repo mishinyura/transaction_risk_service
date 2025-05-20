@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Float, ForeignKey
 from app.models.base_model import BaseModel, BaseInit
 
 
-class Account(BaseInit):
+class AccountModel(BaseInit):
     __tablename__ = 'accounts'
 
     account_id = Column(String, primary_key=True, index=True)

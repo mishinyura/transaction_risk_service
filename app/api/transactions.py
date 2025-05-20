@@ -10,7 +10,7 @@ from app.schemas.transactions import TransactionSchema, TransactionCreateSchema
 from app.services.transactions import transaction_service
 from app.core.db import get_session
 
-transactions_router = APIRouter(tags=["payments"])
+transactions_router = APIRouter(tags=["transactions"])
 
 
 @transactions_router.get("/", response_model=list[TransactionSchema] | None)

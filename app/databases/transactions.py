@@ -23,9 +23,6 @@ class TransactionCRUD(BaseCRUD):
 
     async def add(self, transaction: TransactionModel, session: AsyncSession) -> None:
         try:
-            transaction.timestamp = datetime.datetime.now()
-            for key, val in transaction.__dict__.items():
-                print(key, '|', val)
             session.add(transaction)
             await session.commit()
         except SQLAlchemyError as exc:
