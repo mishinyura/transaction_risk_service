@@ -1,6 +1,4 @@
-import datetime
-
-from sqlalchemy import select, update
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -23,9 +21,6 @@ class TransactionCRUD(BaseCRUD):
 
     async def add(self, transaction: TransactionModel, session: AsyncSession) -> None:
         try:
-            transaction.timestamp = datetime.datetime.now()
-            for key, val in transaction.__dict__.items():
-                print(key, '|', val)
             session.add(transaction)
             await session.commit()
         except SQLAlchemyError as exc:
