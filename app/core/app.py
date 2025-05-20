@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.api import accounts_router, transactions_router
 from app.core.db import create_tables
-from config import settings
+from app.core.config import settings
 
 ROUTES = {
     '/transactions': transactions_router,

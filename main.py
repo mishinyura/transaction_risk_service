@@ -7,7 +7,7 @@ from app.core.db import create_tables
 
 
 if __name__ == '__main__':
-    # asyncio.run(create_tables())
+    # asyncio.run(create_tables()) #Раскомментировать если требуется создать таблицы
     app = get_app(name='Transaction Service')
     app.mount(settings.app.app_mount, app)
 

@@ -3,11 +3,12 @@ from pydantic import BaseModel
 
 
 class AppConfig(BaseModel):
+    app_port: int
     app_version: str
     app_name: str
     app_host: str
-    app_port: int
     app_mount: str
+    app_key: str
 
 
 class DBConfig(BaseModel):
