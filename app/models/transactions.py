@@ -9,7 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     Enum as Enalchemy
 )
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, Mapped, mapped_column
 
 from app.core.enums import TransactionStatus, TransactionType, DeviceUser
 from app.models.base_model import BaseModel, BaseInit
@@ -18,15 +18,15 @@ from app.models.base_model import BaseModel, BaseInit
 class TransactionModel(BaseModel, BaseInit):
     __tablename__ = 'transactions'
 
-    sender_account_id = Column(String, ForeignKey('accounts.account_id'), nullable=False)
-    receiver_account_id = Column(String, ForeignKey('accounts.account_id'), nullable=False)
-    transaction_amount = Column(Numeric(10, 2), nullable=False)
-    transaction_type = Column(Enalchemy(TransactionType), nullable=False)
-    timestamp = Column(DateTime, nullable=False)
-    transaction_status = Column(Enalchemy(TransactionStatus), nullable=False)
-    fraud_flag = Column(Boolean, nullable=False, default=False)
-    geolocation = Column(String, nullable=False)
-    device_user = Column(Enalchemy(DeviceUser), nullable=False)
+    sender_account_id: Mapped[str] = mapped_column(String, ForeignKey('accounts.account_id'), nullable=False)
+    receiver_account_id: Mapped[str] = mapped_column(String, ForeignKey('accounts.account_id'), nullable=False)
+    transaction_amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    transaction_type: Mapped[TransactionType] = mapped_column(Enalchemy(TransactionType), nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    transaction_status: Mapped[TransactionStatus] = mapped_column(Enalchemy(TransactionStatus), nullable=False)
+    fraud_flag: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    geolocation: Mapped[str] = mapped_column(String, nullable=False)
+    device_user: Mapped[DeviceUser] = mapped_column(Enalchemy(DeviceUser), nullable=False)
 
     @validates('transaction_amount')
     def validate_transaction_amount(self, key, amount):

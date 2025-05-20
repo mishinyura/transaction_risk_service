@@ -19,5 +19,9 @@ def get_app(name: str) -> FastAPI:
     app = FastAPI(title=name)
     set_routes(app)
     app.mount(settings.app.app_mount, app)
-    app.add_event_handler("startup", create_tables)
+
+    @app.on_event("startup")
+    async def startup_event():
+        await create_tables()
+
     return app
