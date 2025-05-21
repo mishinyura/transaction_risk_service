@@ -4,6 +4,7 @@ from app.core.exceptions import DuplicateException, SqlException
 from app.models.transactions import TransactionModel
 from app.databases.transactions import transaction_crud
 from app.schemas.transactions import TransactionCreateSchema, TransactionSchema
+from app.services.risk_analysis import risk_analysis_service
 
 
 class TransactionService:
@@ -43,6 +44,11 @@ class TransactionService:
     async def create_transaction(
             self, transaction_data: TransactionCreateSchema, session: AsyncSession
     ) -> None:
+        _, is_fraud = await risk_analysis_service.analyze_transaction(
+            transaction=transaction_data,
+            session=session
+        )
+
         transaction = TransactionModel(
             sender_account_id=transaction_data.sender_account_id,
             receiver_account_id=transaction_data.receiver_account_id,
@@ -50,7 +56,7 @@ class TransactionService:
             transaction_type=transaction_data.transaction_type,
             timestamp=transaction_data.timestamp,
             transaction_status=transaction_data.transaction_status,
-            fraud_flag=transaction_data.fraud_flag,
+            fraud_flag=is_fraud,
             geolocation=transaction_data.geolocation,
             device_user=transaction_data.device_user
         )
