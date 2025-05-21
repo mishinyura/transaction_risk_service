@@ -14,6 +14,16 @@ class TransactionCRUD(BaseCRUD):
         transaction = result.scalar_one_or_none()
         return TransactionSchema.model_validate(transaction)
 
+    async def get_account_send_transactions(self, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
+        result = await session.execute(select(TransactionModel).where(account_id == TransactionModel.sender_account_id))
+        transactions = result.scalars().all()
+        return [TransactionSchema.model_validate(transaction) for transaction in transactions]
+
+    async def get_account_received_transactions(self, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
+        result = await session.execute(select(TransactionModel).where(account_id == TransactionModel.receiver_account_id))
+        transactions = result.scalars().all()
+        return [TransactionSchema.model_validate(transaction) for transaction in transactions]
+
     async def get_all(self, session: AsyncSession) -> list[TransactionSchema] | list:
         result = await session.execute(select(TransactionModel))
         transactions = result.scalars().all()

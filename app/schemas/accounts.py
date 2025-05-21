@@ -12,6 +12,6 @@ class AccountSchema(BaseModel):
 
 
 class AccountRiskSchema(BaseModel):
-    risk: float
+    score: float
 
     model_config = ConfigDict(from_attributes=True)

@@ -1,3 +1,5 @@
+import os
+
 from dynaconf import Dynaconf
 from pydantic import BaseModel
 
@@ -27,7 +29,7 @@ class DBConfig(BaseModel):
         path = 'postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}'.format(
             self.db_user,
             self.db_password,
-            self.db_host,
+            os.getenv('POSTGRES_HOST') or self.db_host,
             self.db_port,
             self.db_name
         )

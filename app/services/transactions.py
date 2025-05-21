@@ -22,6 +22,24 @@ class TransactionService:
         )
         return transaction
 
+    async def get_account_send_transactions(
+            self, account_id: str, session: AsyncSession,
+    ) -> list[TransactionSchema] | list:
+        transactions = await self.crud.get_account_send_transactions(
+            account_id=account_id,
+            session=session,
+        )
+        return transactions
+
+    async def get_account_received_transactions(
+            self, account_id: str, session: AsyncSession,
+    ) -> list[TransactionSchema] | list:
+        transactions = await self.crud.get_account_received_transactions(
+            account_id=account_id,
+            session=session,
+        )
+        return transactions
+
     async def create_transaction(
             self, transaction_data: TransactionCreateSchema, session: AsyncSession
     ) -> None:
