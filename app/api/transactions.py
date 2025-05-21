@@ -15,7 +15,7 @@ transactions_router = APIRouter(tags=["transactions"])
 
 @transactions_router.get("/", response_model=list[TransactionSchema] | None)
 async def get_transactions(session: AsyncSession = Depends(get_session)):
-    transactions = await transaction_service.get_all_payments(session=session)
+    transactions = await transaction_service.get_all_transactions(session=session)
     if not transactions:
         return Response(status_code=HTTP_404_NOT_FOUND)
     return transactions
