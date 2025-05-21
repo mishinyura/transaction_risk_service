@@ -9,10 +9,10 @@ from app.databases.base_crud import BaseCRUD
 
 
 class AccountCRUD(BaseCRUD):
-    async def get_risk(self, account_id: int, session: AsyncSession):
-        result = await session.execute(select(AccountModel.risk).where(account_id == AccountModel.account_id))
-        risk = result.scalar_one_or_none()
-        return AccountRiskSchema.model_validate({'risk': risk})
+    async def get_account(self, account_id: int, session: AsyncSession) -> AccountSchema | None:
+        result = await session.execute(select(AccountModel).where(account_id == AccountModel.account_id))
+        account = result.scalar_one_or_none()
+        return AccountSchema.model_validate(account)
 
     async def get_all(self, session: AsyncSession) -> list[AccountSchema] | list:
         result = await session.execute(select(AccountModel))
