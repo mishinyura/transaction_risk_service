@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, Float, ForeignKey
+from sqlalchemy import Column, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime
 
 from app.models.base_model import BaseModel, BaseInit
 
@@ -11,4 +12,6 @@ class AccountModel(BaseInit):
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     middle_name: Mapped[str] = mapped_column(String, nullable=False)
-    risk: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    score: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    create_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.now())
+    update_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.now())

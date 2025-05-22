@@ -9,20 +9,36 @@ from app.databases.base_crud import BaseCRUD
 
 
 class TransactionCRUD(BaseCRUD):
-    async def get_transaction(self, transaction_id: int, session: AsyncSession) -> TransactionSchema:
+    @classmethod
+    async def get_transaction(cls, transaction_id: int, session: AsyncSession) -> TransactionSchema:
         result = await session.execute(select(TransactionModel).where(transaction_id == TransactionModel.id))
         transaction = result.scalar_one_or_none()
         return TransactionSchema.model_validate(transaction)
 
-    async def get_account_send_transactions(self, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
+    @classmethod
+    async def get_account_send_transactions(cls, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
         result = await session.execute(select(TransactionModel).where(account_id == TransactionModel.sender_account_id))
         transactions = result.scalars().all()
         return [TransactionSchema.model_validate(transaction) for transaction in transactions]
 
-    async def get_account_received_transactions(self, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
+    @classmethod
+    async def get_account_received_transactions(cls, account_id: str, session: AsyncSession) -> list[TransactionSchema] | list:
         result = await session.execute(select(TransactionModel).where(account_id == TransactionModel.receiver_account_id))
         transactions = result.scalars().all()
         return [TransactionSchema.model_validate(transaction) for transaction in transactions]
+
+    @classmethod
+    async def get_transaction_devices(cls, transaction: TransactionSchema, start_date, session: AsyncSession) -> set:
+        result = await session.execute(
+            select(TransactionModel.device_user)
+            .where(
+                TransactionModel.sender_account_id == transaction.sender_account_id,
+                TransactionModel.transaction_datetime >= start_date
+            )
+            .distinct()
+        )
+        recent_devices = {row[0] for row in result.all()}
+        return recent_devices
 
     async def get_all(self, session: AsyncSession) -> list[TransactionSchema]:
         result = await session.execute(select(TransactionModel))

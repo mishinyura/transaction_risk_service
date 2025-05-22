@@ -4,6 +4,15 @@ from dynaconf import Dynaconf
 from pydantic import BaseModel
 
 
+class ScoreConfig(BaseModel):
+    TRANSACTIONS_COUNT_WEIGHT: int
+    TRANSACTIONS_FREQUENCY_WEIGHT: int
+    TRANSACTIONS_QUALITY_WEIGHT: int
+    TRANSACTIONS_TYPE_WEIGHT: int
+    TRANSACTIONS_AMOUNT_WEIGHT: int
+    TRANSACTIONS_FRAUD_WEIGHT: int
+
+
 class AppConfig(BaseModel):
     debug: bool
     app_port: int
@@ -39,6 +48,7 @@ class DBConfig(BaseModel):
 class Settings(BaseModel):
     app: AppConfig
     db: DBConfig
+    score: ScoreConfig
 
 
 dyna_settings = Dynaconf(
@@ -48,5 +58,6 @@ dyna_settings = Dynaconf(
 
 settings = Settings(
     app=dyna_settings['app_settings'],
-    db=dyna_settings['db_settings']
+    db=dyna_settings['db_settings'],
+    score=dyna_settings['score_settings']
 )

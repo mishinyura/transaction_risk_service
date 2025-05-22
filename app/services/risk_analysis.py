@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.transactions import TransactionModel
 from app.models.accounts import AccountModel
 from app.schemas.transactions import TransactionCreateSchema
+from app.databases import transaction_crud
 
 
 class RiskAnalysisService:
@@ -23,6 +24,7 @@ class RiskAnalysisService:
 
     def __init__(self):
         self.analysis_window_days = 7
+        self.crud = transaction_crud
 
     async def analyze_transaction(
         self,
@@ -60,7 +62,7 @@ class RiskAnalysisService:
     ) -> float:
         """Получает уровень риска аккаунта"""
         result = await session.execute(
-            select(AccountModel.risk).where(AccountModel.account_id == account_id)
+            select(AccountModel.score).where(AccountModel.account_id == account_id)
         )
         return result.scalar_one_or_none() or 0.0
 
@@ -78,7 +80,7 @@ class RiskAnalysisService:
             select(func.avg(TransactionModel.transaction_amount))
             .where(
                 TransactionModel.sender_account_id == transaction.sender_account_id,
-                TransactionModel.timestamp >= start_date
+                TransactionModel.transaction_datetime >= start_date
             )
         )
         avg_amount = result.scalar_one_or_none() or 0.0
@@ -101,7 +103,7 @@ class RiskAnalysisService:
             select(TransactionModel.geolocation)
             .where(
                 TransactionModel.sender_account_id == transaction.sender_account_id,
-                TransactionModel.timestamp >= start_date
+                TransactionModel.transaction_datetime >= start_date
             )
             .distinct()
         )
@@ -116,16 +118,10 @@ class RiskAnalysisService:
         session: AsyncSession
     ) -> bool:
         """Проверяет, является ли устройство аномальным"""
-        result = await session.execute(
-            select(TransactionModel.device_user)
-            .where(
-                TransactionModel.sender_account_id == transaction.sender_account_id,
-                TransactionModel.timestamp >= start_date
-            )
-            .distinct()
-        )
-        recent_devices = {row[0] for row in result.all()}
 
+        recent_devices = await self.crud.get_transaction_devices(
+            transaction=transaction, start_date=start_date, session=session
+        )
         return len(recent_devices) > 0 and transaction.device_user not in recent_devices
 
 

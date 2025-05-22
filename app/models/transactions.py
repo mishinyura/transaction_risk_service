@@ -22,7 +22,7 @@ class TransactionModel(BaseModel, BaseInit):
     receiver_account_id: Mapped[str] = mapped_column(String, ForeignKey('accounts.account_id'), nullable=False)
     transaction_amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     transaction_type: Mapped[TransactionType] = mapped_column(Enalchemy(TransactionType), nullable=False)
-    timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    transaction_datetime: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     transaction_status: Mapped[TransactionStatus] = mapped_column(Enalchemy(TransactionStatus), nullable=False)
     fraud_flag: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     geolocation: Mapped[str] = mapped_column(String, nullable=False)
@@ -34,8 +34,8 @@ class TransactionModel(BaseModel, BaseInit):
             raise ValueError('Сумма не может быть меньше или равной 0')
         return amount
 
-    @validates('timestamp')
-    def validate_timestamp(self, key, date):
+    @validates('transaction_datetime')
+    def validate_transaction_date(self, key, date):
         if date > datetime.now():
             raise ValueError('Неверная дата')
         return date

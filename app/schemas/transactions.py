@@ -9,7 +9,7 @@ class TransactionSchema(BaseModel):
     receiver_account_id: str
     transaction_amount: float
     transaction_type: TransactionType
-    timestamp: datetime
+    transaction_datetime: datetime
     transaction_status: TransactionStatus
     fraud_flag: bool
     geolocation: str
@@ -23,7 +23,7 @@ class TransactionCreateSchema(BaseModel):
     receiver_account_id: str
     transaction_amount: float
     transaction_type: TransactionType
-    timestamp: datetime
+    transaction_datetime: datetime
     transaction_status: TransactionStatus
     fraud_flag: bool
     geolocation: str

@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from datetime import datetime
 
 
 class AccountSchema(BaseModel):
@@ -6,7 +7,9 @@ class AccountSchema(BaseModel):
     first_name: str
     last_name: str
     middle_name: str
-    risk: float
+    score: float
+    create_at: datetime
+    update_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 

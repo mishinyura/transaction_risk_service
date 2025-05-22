@@ -49,17 +49,16 @@ class TransactionService:
             session=session
         )
 
-        transaction = TransactionModel(
-            sender_account_id=transaction_data.sender_account_id,
-            receiver_account_id=transaction_data.receiver_account_id,
-            transaction_amount=transaction_data.transaction_amount,
-            transaction_type=transaction_data.transaction_type,
-            timestamp=transaction_data.timestamp,
-            transaction_status=transaction_data.transaction_status,
-            fraud_flag=is_fraud,
-            geolocation=transaction_data.geolocation,
-            device_user=transaction_data.device_user
-        )
+        self.model = TransactionModel(sender_account_id=transaction_data.sender_account_id,
+                                      receiver_account_id=transaction_data.receiver_account_id,
+                                      transaction_amount=transaction_data.transaction_amount,
+                                      transaction_type=transaction_data.transaction_type,
+                                      transaction_datetime=transaction_data.transaction_datetime,
+                                      transaction_status=transaction_data.transaction_status,
+                                      fraud_flag=is_fraud,
+                                      geolocation=transaction_data.geolocation,
+                                      device_user=transaction_data.device_user)
+        transaction = self.model
         try:
             await self.crud.add(transaction=transaction, session=session)
         except SqlException as exc:
