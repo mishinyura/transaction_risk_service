@@ -24,7 +24,7 @@ class TransactionCRUD(BaseCRUD):
         transactions = result.scalars().all()
         return [TransactionSchema.model_validate(transaction) for transaction in transactions]
 
-    async def get_all(self, session: AsyncSession) -> list[TransactionSchema] | list:
+    async def get_all(self, session: AsyncSession) -> list[TransactionSchema]:
         result = await session.execute(select(TransactionModel))
         transactions = result.scalars().all()
         return [TransactionSchema.model_validate(transaction) for transaction in transactions]
