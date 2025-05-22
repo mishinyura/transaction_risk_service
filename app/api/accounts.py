@@ -19,11 +19,11 @@ async def get_accounts(session: AsyncSession = Depends(get_session)):
     return accounts
 
 
-@accounts_router.get("/risk/{account_id}", response_model=AccountRiskSchema | None)
-async def get_risk(
+@accounts_router.get("/score/{account_id}", response_model=AccountRiskSchema | None)
+async def get_account_score(
     account_id: str, session: AsyncSession = Depends(get_session)
 ):
-    account = await account_service.get_account_risk(
+    account = await account_service.get_account_score(
         account_id=account_id, session=session
     )
     if not account:
