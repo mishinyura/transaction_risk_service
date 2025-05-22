@@ -11,8 +11,8 @@ class TransactionService:
         self.crud = transaction_crud
 
     async def get_all_transactions(self, session: AsyncSession) -> list[TransactionSchema]:
-        payments = await self.crud.get_all(session=session)
-        return payments
+        transactions = await self.crud.get_all(session=session)
+        return transactions
 
     async def get_transaction_by_transaction_id(
         self, transaction_id: str, session: AsyncSession
